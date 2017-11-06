@@ -1,1 +1,4 @@
-source ~/blog/blog-venv/bin/activate
+#!/bin/bash
+lpath=`pwd`
+echo ${lpath}
+source ${lpath}/blog-venv/bin/activate
