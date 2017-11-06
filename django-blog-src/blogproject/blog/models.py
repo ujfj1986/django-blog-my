@@ -80,4 +80,4 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, blank=True)
 
     #评论可以是另外一个评论的回复
-    comment = models.ForeignKey(Comment, blank=True)
+    commentid = models.IntegerField(blank=True)
