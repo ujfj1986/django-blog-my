@@ -1,4 +1,20 @@
 #!/bin/bash
 lpath=`pwd`
 echo ${lpath}
-source ${lpath}/blog-venv/bin/activate
+if [ 'x'$1 == '' ]; then
+    echo "Use case:"
+    echo "  source blogvenv platename"
+    echo "*Make sure you have install virtaulenv"
+    exit 0
+fi
+if [ ! -d ${lpath}/blog-venvs ]; then
+    mkdir -p ${lpath}/blog-venvs
+fi
+if [ ! -d ${lpath}/blog-venv-cur ]
+then
+    if [ ! -d ${lpath}/blog-venvs/blog-venv-$1 ]; then
+        virtualenv ${lpath}/blog-venvs/blog-venv-$1
+    fi
+    ln -s ${lpath}/blog-venvs/blog-venv-$1/ blog-venv-cur
+fi
+source ${lpath}/blog-venv-cur/bin/activate
