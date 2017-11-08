@@ -85,10 +85,10 @@ Windows:
 
 ##3. 创建数据库
 ###. 数据库设计
-blog需要设计4个表：文章(Post)，分类(Category), 标签(Tag)和回复(Comment)。其中，一个文章只能有一个分类，可以有多个或者0个标签，可以有0个或者多个回复。一个回复可以是一个文章的回复，也可以是某个回复的回复。
+blog需要设计3个表：文章(Post)，分类(Category), 标签(Tag)。其中，一个文章只能有一个分类，可以有多个或者0个标签。
 
 ###. 更改models
-修改blog models.py文件，加入4个表的定义，主要需要注意：
+修改blog models.py文件，加入3个表的定义，主要需要注意：
 > ####**所有模型必须继承自models.Model类**
 > models.ForeignKey()指定一对多关系。
 > models.ManyToManyField()指定多对多关系

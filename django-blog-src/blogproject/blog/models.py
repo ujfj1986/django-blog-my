@@ -80,28 +80,3 @@ class Post(models.Model):
     # 记得从django.urls 中导入reverse函数
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
-
-@python_2_unicode_compatible
-class Comment(models.Model):
-    """
-    文章的评论
-    """
-
-    #文章评论的标题
-    title = models.CharField(max_length = 50)
-
-    #文章评论的主体
-    body = models.TextField()
-
-    #评论的创建时间
-    create_time = models.DateTimeField()
-
-    #评论可以是对于一个文章的评论；也可以是对一个评论的回复。
-    #一个文章可以有多个评论；但是评论只可以真对一个文章。
-    post = models.ForeignKey(Post, blank=True)
-
-    #评论可以是另外一个评论的回复
-    commentid = models.IntegerField(blank=True)
-
-    def __str__(self):
-        return self.title
