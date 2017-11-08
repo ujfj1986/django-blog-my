@@ -1,7 +1,7 @@
 #!/bin/bash
 
 stop_blog() {
-	pid=`ps -ef | grep "python manage\.py runserver" | awk "{ print $2 }"`
+	pid=`ps -ef | grep "python manage\.py runserver" | awk 'NR == 1 { print $2 }'`
 	echo $pid
 	kill -9 $pid
 }
