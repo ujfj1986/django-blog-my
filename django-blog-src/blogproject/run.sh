@@ -1,13 +1,13 @@
 #!/bin/bash
 
 stop_blog() {
-	pid=`ps -ef | grep "manage.py" | awk "{ print $2 }"`
+	pid=`ps -ef | grep "python manage\.py runserver" | awk "{ print $2 }"`
 	echo $pid
 	kill -9 $pid
 }
 
 start_blog() {
-	python manage.py runserver 0.0.0.0:8000 > 2 &
+	python manage.py runserver 0.0.0.0:8000 1>/dev/null &
 }
 
 if [ 'x'$1 != 'x' ]; then
