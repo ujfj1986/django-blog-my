@@ -8,8 +8,19 @@ from comment.forms import CommentForm
 
 def index(request):
     post_list = Post.objects.all()
+    s = {'username': 'shjj',
+        'isOwner': True,
+        'isLoged': True,
+        }
     return render(request, 'blog/index.html', context= {
-            'post_list': post_list})
+            'post_list': post_list,
+            'session': s})
+
+from django.views.generic import ListView
+class IndexView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
 
 def detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -38,6 +49,15 @@ def get_post_by_category(request, pk):
     post_list = Post.objects.filter(category=category)
     return render(request, 'blog/index.html', context= {
             'post_list': post_list})
+    
+class CategoryView(ListView):
+    model = Post
+    template_name = 'blog/index.html'
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
+        return super(CategoryView, self).get_queryset().filter(category=cate)
 
 def get_posts_by_tag(request, pk):
     tag = get_object_or_404(Tag, pk=pk)
