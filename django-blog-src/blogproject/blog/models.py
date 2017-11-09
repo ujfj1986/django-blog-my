@@ -55,7 +55,7 @@ class Post(models.Model):
 
     # 这两个列分别表示文章的创建时间和最后一次修改时间，存储时间的字段用 DateTimeField 类型。
     created_time = models.DateTimeField()
-    modified_time = models.DateTimeField()
+    modified_time = models.DateTimeField(auto_now_add=True)
 
     # 文章摘要，可以没有文章摘要，但默认情况下 CharField 要求我们必须存入数据，否则就会报错。
     # 指定 CharField 的 blank=True 参数值后就可以允许空值了。
@@ -103,5 +103,5 @@ class Post(models.Model):
             ])
             self.excerpt = strip_tags(md.convert(self.body))[:54]
         
-        self.modified_time = datetime.now()
+        #self.modified_time = datetime.now()
         super(Post, self).save(*args, **kwargs)
