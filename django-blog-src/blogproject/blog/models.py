@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 from django.utils.six import python_2_unicode_compatible
 from django.urls import reverse
 
+import markdown
+from django.utils.html import strip_tags
+import logging
+
 # Create your models here.
 
 # python_2_unicode_compatible 装饰器用于兼容 Python2
@@ -90,3 +94,14 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-created_time', 'title']
+
+    def save(self, *args, **kwargs):
+        if not self.excerpt:
+            md = markdown.Markdown(externsions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+            ])
+            self.excerpt = strip_tags(md.convert(self.body))[:54]
+        
+        self.modified_time = datetime.now()
+        super(Post, self).save(*args, **kwargs)
