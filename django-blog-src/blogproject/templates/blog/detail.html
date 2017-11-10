@@ -10,13 +10,34 @@
                                                             datetime="{{ post.created_time }}">{{ post.created_time }}</time></a></span>
                 <span class="post-author"><a href="#">{{ post.author }}</a></span>
                 <span class="comments-link"><a href="#">{{post.comment_set.count}} 评论</a></span>
-                <span class="views-count"><a href="#">{{post.views}}阅读</a></span>
+                <span class="views-count">{{post.views}}阅读</span>
             </div>
         </header>
         <div class="entry-content clearfix">
             {{ post.body | safe }}
         </div>
     </article>
+    <div class="pagination-simple">
+        <li>
+            {% if post.before %}
+            <span>
+                <a class="" href="{% url 'blog:detail' post.before.pk %}">
+                上一篇 《{{ post.before }}》
+            </a></span>
+            {% else %}
+            无上一篇。
+            {% endif %}
+        </li>
+        <li>
+            {% if post.next %}
+            <a class="" href="{% url 'blog:detail' post.next.pk %}">
+                <span>下一篇 《{{ post.next }}》</span>
+            </a>
+            {% else %}
+            无下一篇。
+            {% endif %}
+        </li>
+    </div>
     <section class="comment-area" id="comment-area">
         <hr>
         <h3>发表评论</h3>

@@ -31,6 +31,8 @@ def detail(request, pk):
                                      'markdown.extensions.codehilite',
                                      'markdown.extensions.toc',
                                  ])
+    post.before = Post.objects.filter(pk=str(int(pk)-1)).first()
+    post.next = Post.objects.filter(pk=str(int(pk)+1)).first()
     form = CommentForm()
     comment_list = post.comment_set.all()
     context = {'post': post,
