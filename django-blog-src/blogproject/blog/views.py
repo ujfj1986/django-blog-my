@@ -50,11 +50,7 @@ def get_post_by_category(request, pk):
     return render(request, 'blog/index.html', context= {
             'post_list': post_list})
     
-class CategoryView(ListView):
-    model = Post
-    template_name = 'blog/index.html'
-    context_object_name = 'post_list'
-
+class CategoryView(IndexView):
     def get_queryset(self):
         cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
         return super(CategoryView, self).get_queryset().filter(category=cate)
