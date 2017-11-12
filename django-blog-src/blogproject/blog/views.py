@@ -10,7 +10,8 @@ def index(request):
     post_list = Post.objects.all()
     s = {'username': 'shjj',
         'isOwner': True,
-        'isLoged': True,
+        'isLoged': False,
+        'cur_path': request.get_full_path(),
         }
     return render(request, 'blog/index.html', context= {
             'post_list': post_list,
