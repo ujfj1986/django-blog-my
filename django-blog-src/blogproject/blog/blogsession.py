@@ -15,9 +15,7 @@ class BlogSession(object):
         self.username = request.session.get('username', None)
         self.isOwner = request.session.get('isOwner', False)
         self.isLogined = request.session.get('isLogined', False)
-        self.cur_path = request.session.get('cur_path', None)
-        if self.cur_path == None :
-            self.cur_path = request.path()
+        self.cur_path = request.get_full_path()
 
     '''def __init__(self):
         pass'''
@@ -34,9 +32,8 @@ class BlogSession(object):
         self.username = request.session.get('username', None)
         self.isOwner = request.session.get('isOwner', False)
         self.isLogined = request.session.get('isLogined', False)
-        self.cur_path = request.session.get('cur_path', None)
-        if self.cur_path == None :
-            self.cur_path = request.path()
+        self.cur_path = request.get_full_path()
+        self.setToSession(request)
 
     def __str__(self):
         return '{username: %s, isOwner: %s, isLogined: %s, cur_path: %s}' % (self.username, self.isOwner, self.isLogined, self.cur_path)
