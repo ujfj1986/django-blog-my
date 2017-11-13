@@ -23,12 +23,15 @@ def index(request):
             'post_list': post_list,
             'session': s})
 
-from django.views.generic import ListView
-class IndexView(ListView):
+from django.views.generic import ListView, DetailView
+class BlogBasicView(object):
+    blogsession = BlogSession()
+
+class IndexView(ListView, BlogBasicView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
-    blogsession = BlogSession()
+    #blogsession = BlogSession()
 
     '''def get(self, request, *args, **kwargs):
         res = super(IndexView, self).get(request, *args, **kwargs)
@@ -66,6 +69,51 @@ def detail(request, pk):
                'comment_list': comment_list}
     return render(request, 'blog/detail.html', context=context)
 
+class PostDetailView(DetailView, BlogBasicView):
+    # 这些属性的含义和 ListView 是一样的
+    model = Post
+    template_name = 'blog/detail.html'
+    context_object_name = 'post'
+
+    def get(self, request, *args, **kwargs):
+        # 覆写 get 方法的目的是因为每当文章被访问一次，就得将文章阅读量 +1
+        # get 方法返回的是一个 HttpResponse 实例
+        # 之所以需要先调用父类的 get 方法，是因为只有当 get 方法被调用后，
+        # 才有 self.object 属性，其值为 Post 模型实例，即被访问的文章 post
+        response = super(PostDetailView, self).get(request, *args, **kwargs)
+
+        # 将文章阅读量 +1
+        # 注意 self.object 的值就是被访问的文章 post
+        self.object.increase_views()
+        self.blogsession.update(request)
+
+        # 视图必须返回一个 HttpResponse 对象
+        return response
+
+    def get_object(self, queryset=None):
+        # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
+        post = super(PostDetailView, self).get_object(queryset=None)
+        post.body = markdown.markdown(post.body,
+                                      extensions=[
+                                          'markdown.extensions.extra',
+                                          'markdown.extensions.codehilite',
+                                          'markdown.extensions.toc',
+                                      ])
+        return post
+
+    def get_context_data(self, **kwargs):
+        # 覆写 get_context_data 的目的是因为除了将 post 传递给模板外（DetailView 已经帮我们完成），
+        # 还要把评论表单、post 下的评论列表传递给模板。
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        form = CommentForm()
+        comment_list = self.object.comment_set.all()
+        context.update({
+            'form': form,
+            'comment_list': comment_list,
+            'session': self.blogsession
+        })
+        return context
+
 def archives(request, year, month):
     post_list = Post.objects.filter(created_time__year = year,
                                     created_time__month = month)
@@ -95,3 +143,8 @@ def get_posts_by_tag(request, pk):
     post_list = Post.objects.filter(tags=tag)
     return render(request, 'blog/index.html', context={
             'post_list': post_list})
+
+class TagView(IndexView):
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
+        return super(TagView, self).get_queryset().filter(tags=tag)
