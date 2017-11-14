@@ -1,0 +1,70 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>烂笔头 | 登录</title>
+
+		<!-- meta -->
+		<meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- css -->
+		<link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<link rel="stylesheet" href="{% static 'blog/css/pace.css' %}">
+		<link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
+		<link rel="stylesheet" href="{% static 'blog/css/highlights/github.css' %}">
+	
+		<!-- js -->
+		<script src="{% static 'blog/js/jquery-2.1.3.min.js' %}"></script>
+		<script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'blog/js/pace.min.js' %}"></script>
+		<script src="{% static 'blog/js/modernizr.custom.js' %}"></script>
+	</head>
+
+	<body id="page">
+		<div class="content-body">
+			<div class="container">
+				<!--<div class="row"> -->
+					<main class="col-md-12">
+						<h1 class="page-title">登录</h1>
+						<form action="{% url 'login:login' cur_path %}" method="post" class="comment-form">
+							{% csrf_token %}
+							<!-- 这个token是什么作用？ -->
+							<!--<div class="row"> -->
+								<div class="col-md-6">
+									<label for="{{ form.username.id_for_lable }}">用户名：</label>
+									{{ form.username }} {{ form.username.errors }}
+								</div>
+								<div class="col-md-6">
+									<label for="{{ form.password.id_for_lable }}">密码：</label>
+									{{ form.password }} {{ form.password.errors }}
+								</div>
+								<div class="col-md-12">
+									<button type="submit" class="comment-btn">登录</button>
+								</div>
+							<!-- </div> -->
+							<!-- row -->
+						</form>
+					</main>
+				<!--</div>-->
+			</div>
+		</div>
+
+		<!-- Mobile Menu -->
+		<div class="overlay overlay-hugeinc">
+			<button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
+			<nav>
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="full-width.html">Blog</a></li>
+					<li><a href="about.html">About</a></li>
+					<li><a href="contact.html">Contact</a></li>
+				</ul>
+			</nav>
+		</div>
+
+		<script src="{% static 'js/script.js' %}"></script>
+		
+	</body>
+</html>
