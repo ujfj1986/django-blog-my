@@ -12,9 +12,11 @@ class BlogSession(object):
     def __init__(self, request = None):
         if request == None :
             return
-        self.username = request.session.get('username', None)
+        '''self.username = request.session.get('username', None)
         self.isOwner = request.session.get('isOwner', False)
-        self.isLogined = request.session.get('isLogined', False)
+        self.isLogined = request.session.get('isLogined', False)'''
+        self.username = request.user.username
+        self.isLogined = request.user.is_authenticated
         self.cur_path = request.get_full_path()
 
     '''def __init__(self):
@@ -29,11 +31,15 @@ class BlogSession(object):
     def update(self, request):
         if request == None:
             return
-        self.username = request.session.get('username', None)
+        '''self.username = request.session.get('username', None)
         self.isOwner = request.session.get('isOwner', False)
         self.isLogined = request.session.get('isLogined', False)
         self.cur_path = request.get_full_path()
-        self.setToSession(request)
+        self.setToSession(request)'''
+        self.username = request.user.username
+        self.isLogined = request.user.is_authenticated
+        self.cur_path = request.get_full_path()
+
 
     def __str__(self):
         return '{username: %s, isOwner: %s, isLogined: %s, cur_path: %s}' % (self.username, self.isOwner, self.isLogined, self.cur_path)

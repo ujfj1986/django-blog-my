@@ -7,5 +7,5 @@ from . import views
 app_name = 'login'
 
 urlpatterns = [
-    url(r'^next=(?P<cur_path>([a-z0-9/.]+))$', views.login, name='login'),
+    url(r'^next=(?P<cur_path>([a-z0-9/.]+))$', views.LoginView.as_view(), name='login'),
 ]
