@@ -51,7 +51,7 @@
                             {% if session.isLogined %}
                             <li class="cl-effect-11"><a href="#" data-hover="{{session.username}}">{{session.username}}</a></li>
                             <li class="cl-effect-11"><a href="#" data-hover="发布">发布</a></li>
-                            <li class="cl-effect-11"><a href="#" data-hover="登出">登出</a></li>
+                            <li class="cl-effect-11"><a href="{% url 'login:logout' session.cur_path %}" data-hover="登出">登出</a></li>
                             {% else %}
                             <li class="cl-effect-11"><a href="{% url 'login:login' session.cur_path %}" data-hover="登录">登录</a></li>
                             {% endif %}

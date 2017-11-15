@@ -17,6 +17,16 @@ logger = logging.getLogger('blog.views')
 def login(request, cur_path):
     return HttpResponse("login")
 
+def logout(request, cur_path):
+    logger.error("cur_path is %s." % cur_path)
+    session = BlogSession(request)
+    session.username = None
+    session.isLogined = False
+    session.cur_path = cur_path
+    session.setToSession(request)
+    #logout(request, cur_path)
+    return HttpResponseRedirect(cur_path)
+
 class LoginView(View):
 
     #model = User

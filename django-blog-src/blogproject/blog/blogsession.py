@@ -23,10 +23,26 @@ class BlogSession(object):
         pass'''
 
     def setToSession(self, request):
-        request.session['username'] = self.username
+        if self.username is None and 'username' in request.session.keys():
+            del request.session['username']
+        elif self.username is not None:
+            request.session['username'] = self.username
+        if self.isOwner is None and 'isOwner' in request.session.keys():
+            del request.session['isOwner']
+        elif self.isOwner is not None:
+            request.session['isOwner'] = self.isOwner
+        if self.isLogined is None and 'isLogined' in request.session.keys():
+            del request.session['isLogined']
+        elif self.isLogined is not None:
+            request.session['isLogined'] = self.isLogined
+        if self.cur_path is None and 'cur_path' in request.session.keys():
+            del request.session['cur_path']
+        elif self.cur_path is not None:
+            request.session['cur_path'] = self.cur_path
+        '''request.session['username'] = self.username
         request.session['isOwner'] = self.isOwner
         request.session['isLogined'] = self.isLogined
-        request.session['cur_path'] = self.cur_path
+        request.session['cur_path'] = self.cur_path'''
 
     def update(self, request):
         if request == None:
