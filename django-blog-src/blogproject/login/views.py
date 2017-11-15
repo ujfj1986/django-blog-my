@@ -61,7 +61,7 @@ class LoginView(View):
         if user is not None:
             logger.error("user is not None.")
             logger.error("--request's username is %s, is_authenticated is %s." % (request.user.username, request.user.is_authenticated))
-            logger.error("==request.session is %s." % request.session['username'])
+            logger.error("==request.session is %s." % request.session.get('username'))
             login(request, user)
             session = BlogSession(request)
             session.username = username

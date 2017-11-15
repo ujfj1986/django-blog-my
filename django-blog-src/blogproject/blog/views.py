@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404
 import markdown
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post, Category, Tag
 from comment.forms import CommentForm
 from .blogsession import BlogSession
+from .forms import PostForm
 import logging
 
 logger = logging.getLogger('blog.views')
@@ -163,3 +164,31 @@ class TagView(IndexView):
     def get_queryset(self):
         tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
         return super(TagView, self).get_queryset().filter(tags=tag)
+
+class PostModifyView(DetailView, BlogBasicView):
+    model= Post
+    template_name = 'blog/post_modify.html'
+    context_object_name = 'form'
+
+    def get(self, request, *args, **kwargs):
+        self.blogsession.update(request)
+        cur_path = request.get_full_path()
+        if self.blogsession.isLogined:
+            return super(PostModifyView, self).get(request, *args, **kwargs)
+        return HttpResponseRedirect('/login/next=%s' % cur_path)
+
+    def get_object(self, queryset = None):
+        path = self.request.get_full_path()
+        form = PostForm()
+        if path.endswith('modify'):
+            pk = self.kwargs.get('pk')
+            post = super(PostModifyView, self).get_object(queryset=None)
+            form = PostForm()
+            form.init(post)
+        return form
+
+    def get_context_data(self, **kwargs):
+        self.blogsession.update(self.request)
+        context = super(PostModifyView, self).get_context_data(**kwargs)
+        context['session'] = self.blogsession
+        return context
