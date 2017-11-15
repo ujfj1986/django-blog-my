@@ -10,9 +10,19 @@
                     {{ form.title.errors }}
                 </div>
                 <div class="col-md-12">
+                    <label for="{{ form.excerpt.id_for_lable }}">简介：</label>
+                    {{ form.excerpt }}
+                    {{ form.excerpt.errors }}
+                </div>
+                <div class="col-md-4">
                     <label for="{{ form.category.id_for_lable }}">分类：</label>
                     {{ form.category }}
                     {{ form.category.errors }}
+                </div>
+                <div class="col-md-8">
+                    <label for="{{ form.tags.id_for_lable }}">标签：</label>
+                    {{ form.tags }}
+                    {{ form.tags.errors }}
                 </div>
                 <!-- <div class="col-md-4">
                     <label for="{{ form.url.id_for_lable }}">网址：</label>

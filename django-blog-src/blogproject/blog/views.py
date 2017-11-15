@@ -7,6 +7,7 @@ from .models import Post, Category, Tag
 from comment.forms import CommentForm
 from .blogsession import BlogSession
 from .forms import PostForm
+from django.utils.timezone import now
 import logging
 
 logger = logging.getLogger('blog.views')
@@ -183,8 +184,20 @@ class PostModifyView(DetailView, BlogBasicView):
         if path.endswith('modify'):
             pk = self.kwargs.get('pk')
             post = super(PostModifyView, self).get_object(queryset=None)
-            form = PostForm()
-            form.init(post)
+            tags_list = post.tags.all()
+            tag_str = ''
+            for tag in tags_list:
+                tag_str += tag.name + ' '
+            form = PostForm(initial = {
+                'title': post.title,
+                'category': post.category,
+                'tags': tag_str,
+                'excerpt': post.excerpt,
+                'body': post.body,
+            })
+            #form.fields['title'] = post.title + 'ddd'
+            form.pk = post.pk
+            #form.init(post)
         return form
 
     def get_context_data(self, **kwargs):
@@ -192,3 +205,38 @@ class PostModifyView(DetailView, BlogBasicView):
         context = super(PostModifyView, self).get_context_data(**kwargs)
         context['session'] = self.blogsession
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.blogsession.update(request)
+        cur_path=request.get_full_path()
+        if not self.blogsession.isLogined:
+            return HttpResponseRedirect('/login/next=%s' % cur_path)
+        form = PostForm(request.POST)
+        if not form.is_valid():
+            return HttpResponseRedirect(cur_path)
+        post = None
+        if cur_path.endswith('modify'):
+            pk = kwargs.get('pk')
+            post = Post.objects.get(pk=pk)
+        else:
+            post = Post()
+            post.created_time = now()
+            post.author = User.object.get(username=self.blogsession.username)
+        post.title = form.cleaned_data['title']
+        post.excerpt = form.cleaned_data['excerpt']
+        cate = Category.objects.all().filter(name=form.cleaned_data['category']).first()
+        if cate is None:
+            cate = Category(name=form.cleaned_data['category'])
+            cate.save()
+        post.category = cate
+        tags_str = form.cleaned_data['tags']
+        tags = None
+        for tag in tags_str.split(' '):
+            tags = Tag.objects.all().filter(name=tag).first()
+            if tags is None:
+                tags = Tag(name=tag)
+                tags.save()
+            post.tags.push(tags)
+        post.body = form.cleaned_data['body']
+        post.save()
+        return redirect(post)
