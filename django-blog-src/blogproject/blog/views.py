@@ -111,6 +111,7 @@ class PostDetailView(DetailView, BlogBasicView):
         #logger.error("pk is %s." % pk)
         post.before = Post.objects.filter(pk=str(int(pk)-1)).first()
         post.next = Post.objects.filter(pk=str(int(pk)+1)).first()
+        #logger.error("post.tags is %s." % post.tags.all().first())
         return post
 
     def get_context_data(self, **kwargs):

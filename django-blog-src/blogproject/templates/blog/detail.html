@@ -12,6 +12,15 @@
                 <span class="comments-link"><a href="#">{{post.comment_set.count}} 评论</a></span>
                 <span class="views-count">{{post.views}}阅读</span>
             </div>
+            <div class="entry-meta">
+                <label>TAGS:</label>
+                {% for tag in post.tags.all %}
+                <span class="post-tags">
+                    <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}</a>
+                </span>
+                {% empty %}
+                {% endfor %}
+            </div>
         </header>
         <div class="entry-content clearfix">
             {{ post.body | safe }}
