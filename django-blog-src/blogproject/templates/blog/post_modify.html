@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block main %}
+        {% if form.is_modify %}
         <form action="{% url 'blog:post_modify' form.pk %}" method="post" class="comment-form">
+        {% else %}
+        <form action="/post/add" method="post" class="comment-form">
+        {%endif%}
             {% csrf_token %} <!-- 这个token是什么作用？ -->
             <div class="row">
                 <div class="col-md-12">
