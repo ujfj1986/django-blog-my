@@ -6,6 +6,7 @@ from . import views
 from .feeds import AllPostsRssFeed
 from .post_detail_view import PostDetailView
 from .post_modify_view import PostModifyView
+from .search_views import PostSearchView
 
 app_name = 'blog'
 
@@ -19,4 +20,5 @@ urlpatterns = [
     url(r'^category/(?P<pk>[0-9]+)/$', views.CategoryView.as_view(), name='category'),
     url(r'^tag/(?P<pk>[0-9]+)/$', views.TagView.as_view(), name='tag'),
     url(r'^all/feeds/$', AllPostsRssFeed(), name='feeds'),
+    url(r'search/', PostSearchView(), name='haystack_search'),
 ]
