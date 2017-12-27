@@ -78,13 +78,63 @@
 <div class="content-body">
     <div class="container">
         <div class="row">
-            <main class="col-md-8">
+            <main class="col-md-12">
                 {% block main %}
                 {% endblock main %}
             </main>
-            <aside class="col-md-4">
-                {% block toc %}
-                {% endblock toc %}
+            <aside class="col-md-4 col-md-offset-6 " style="position:absolute; color: rgba(241, 244, 247, 0.226)">
+                    {% block toc %}
+                    {% endblock toc %}
+                <div class="col-md-3 dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="color:rgba(102, 128, 153, 0.45)">
+                        最新文章
+                        <span class="ion-arrow-down-b"></span>
+                    </button>
+                    {% get_recent_posts as recent_post_list %}
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        {% for post in recent_post_list %}
+                        <li>
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        </li>
+                        {% empty %}
+                        暂无文章！
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-3 dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="color:rgba(102, 128, 153, 0.45)">
+                        归档
+                        <span class="ion-arrow-down-b"></span>
+                    </button>
+                    {% archives as archives %}
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        {% for archive in archives %}
+                        <li>
+                            <a href="{% url 'blog:archives' archive.year archive.month %}">{{ archive.year }} 年 {{ archive.month }} 月({%get_post_num_by_archive archive.year archive.month%})</a>
+                        </li>
+                        {% empty %}
+                        暂无归档！
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-3 dropdown">
+                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="color:rgba(102, 128, 153, 0.45)">
+                        分类
+                        <span class="ion-arrow-down-b"></span>
+                    </button>
+                    {% get_categories as categories%}
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        {% for category in categories %}
+                        <li>
+                            <a href="{% url 'blog:category' category.pk %}">{{ category.name }}<span class="post-count">({{category.num_posts}})</span></a>
+                        </li>
+                        {% empty %}
+                        暂无分类！
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!--
                 <div class="widget widget-recent-posts">
                     <h3 class="widget-title">最新文章</h3>
                     {% get_recent_posts as recent_post_list %}
@@ -142,6 +192,7 @@
                 <div class="rss">
                     <a href="{% url 'blog:feeds' %}"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
                 </div>
+            -->
             </aside>
         </div>
     </div>
