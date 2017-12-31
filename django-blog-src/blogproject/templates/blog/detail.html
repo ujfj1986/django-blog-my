@@ -22,7 +22,7 @@
             <ul>
             {% for tag in post.tags.all %}
             <li>
-                <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}</a>
+                <a href="{% url 'blog:tag' tag.pk %}">#{{ tag.name }}</a>
             </li>
             {% empty %}
             无
@@ -34,7 +34,7 @@
         </div>
     </article>
     <ul>
-        <li :first-child>
+        <li class="col-md-3">
             {% if post.before %}
             <span>
                 <a class="" href="{% url 'blog:detail' post.before.pk %}">
@@ -44,7 +44,7 @@
             <span>无</span>
             {% endif %}
         </li>
-        <li :last-child>
+        <li class="col-md-3 pull-right">
             {% if post.next %}
             <a class="" href="{% url 'blog:detail' post.next.pk %}">
                 <span>下一篇 《{{ post.next }}》</span>
